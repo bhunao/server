@@ -23,6 +23,7 @@ def tag(tag: str):
         return tags[0] + '\n'.join(content)  + tags[1]
     return return_func
 
+doctype = '<!DOCTYPE html>'
 html_ = tag('html')
 head = tag('head')
 body = tag('body')
@@ -69,7 +70,7 @@ class Server(BaseHTTPRequestHandler):
         button_tst = '<button type="button" onClick="click()">Click me</button>' + '<p>Clicks: <a id="clicks">0</a></p>'
 
         if status == HTTPStatus.OK:
-            html = html_(
+            html_content = html_(
                 head(
                     link(rel='stylesheet', href='https://cdn.simplecss.org/simple.min.css'
                          )
@@ -85,12 +86,13 @@ class Server(BaseHTTPRequestHandler):
             )
 
         else:
-            html = html_(
+            html_content = html_(
                 head(link(rel='stylesheet', href='https://cdn.simplecss.org/simple.min.css')),
                 h1(content)
                 )
 
-        self.wfile.write(bytes(html, 'utf-8'))
+        self.wfile.write(bytes(doctype, 'utf-8'))
+        self.wfile.write(bytes(str(html_content), 'utf-8'))
 
 
         print(f'{self.path=}')
